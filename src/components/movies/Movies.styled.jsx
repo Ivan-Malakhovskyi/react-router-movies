@@ -8,6 +8,7 @@ export const Form = styled.form`
   display: flex;
   align-items: center;
   gap: 20px;
+  padding-bottom: 40px;
 `;
 
 export const Input = styled.input`
@@ -28,4 +29,9 @@ export const BtnSearch = styled.button`
   background-color: ${({ theme: { colors } }) => colors.borderListColor};
   line-height: 24px;
   cursor: pointer;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover,
+  &:focus {
+    transform: scale(1.05);
+  }
 `;

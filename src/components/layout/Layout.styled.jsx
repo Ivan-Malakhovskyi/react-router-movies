@@ -63,3 +63,13 @@ export const ListMainLink = styled.ul`
   line-height: 1.5;
   letter-spacing: 0.02em;
 `;
+
+export const ErrorMsg = styled.p`
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.33; /* 133.333% */
+  letter-spacing: -0.36px;
+`;

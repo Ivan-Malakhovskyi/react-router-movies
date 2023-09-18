@@ -8,17 +8,20 @@ import {
   ImageItem,
 } from './Cast.styled';
 import { TitleInfoMore } from 'components/movieDetailsStyled/movieDetailst.styled';
+import { useQueryParams } from 'components/hooks/useQueryParams';
 
 const Cast = () => {
-  const { movieId } = useParams();
-  console.log(movieId);
-  const API_KEY = 'fd98539c24110fb9af262d45db0a0c64';
-  axios.defaults.baseURL = 'https://api.themoviedb.org/3';
-  const defaultImg =
-    'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
   const [cast, setCast] = useState(null);
+  const { movieId } = useParams();
+  const { API_KEY } = useQueryParams();
+
   useEffect(() => {
-    if (!movieId) return;
+    if (!movieId) {
+      return;
+    }
+
+    axios.defaults.baseURL = 'https://api.themoviedb.org/3';
+
     const fetchInfoAboutCast = async () => {
       try {
         const response = await axios.get(
@@ -33,7 +36,10 @@ const Cast = () => {
       }
     };
     fetchInfoAboutCast();
-  }, [movieId]);
+  }, [API_KEY, movieId]);
+
+  const defaultImg =
+    'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
 
   return (
     <>

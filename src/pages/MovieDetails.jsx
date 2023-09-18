@@ -1,6 +1,6 @@
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   MoovieImage,
   MovieInfo,
@@ -16,9 +16,12 @@ import {
   StyledLinkWrapper,
 } from 'components/layout/Layout.styled';
 import { RewiewsParagraph } from 'components/reviews/Reviews.styled';
+import { BackLink } from 'components/movies/SearchMovie.styled';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
+  const location = useLocation();
+  const backLinkLocation = useRef(location?.state?.from ?? '/movies');
 
   const API_KEY = 'fd98539c24110fb9af262d45db0a0c64';
   axios.defaults.baseURL = 'https://api.themoviedb.org/3';
@@ -46,6 +49,8 @@ const MovieDetails = () => {
 
   return (
     <>
+      <BackLink to={backLinkLocation.current}>Back</BackLink>
+
       {moviesInfo && (
         <MovieWrapper>
           <MoovieImage
@@ -98,3 +103,6 @@ const MovieDetails = () => {
 };
 
 export default MovieDetails;
+
+// * location?.state?.from ?? '/movies'
+// !location && location.state && location.state.from

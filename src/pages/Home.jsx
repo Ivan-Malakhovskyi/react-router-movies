@@ -5,11 +5,16 @@ import {
   SectionHome,
   StyledLinkItem,
 } from 'components/home/Home.styled';
+import { useQueryParams } from 'components/hooks/useQueryParams';
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const Home = () => {
-  const API_KEY = 'fd98539c24110fb9af262d45db0a0c64';
+  const { API_KEY } = useQueryParams();
   axios.defaults.baseURL = 'https://api.themoviedb.org/3';
+  const location = useLocation();
+
+  console.log(location);
 
   const [fetchData, setFetchData] = useState([]);
 
@@ -27,15 +32,16 @@ const Home = () => {
       }
     };
     fetchCollectionFilms();
-  }, []);
+  }, [API_KEY]);
 
   return (
     <SectionHome>
       <HomeTitle>Trending today</HomeTitle>
+
       <ListMoovie>
         {fetchData.map(({ id, original_title }) => (
           <li key={id}>
-            <StyledLinkItem to={`/movies/${id}`}>
+            <StyledLinkItem to={`/movies/${id}`} state={{ from: location }}>
               {original_title}
             </StyledLinkItem>
           </li>

@@ -7,6 +7,7 @@ import {
   ListMainLink,
   StyledLinkWrapper,
 } from './Layout.styled';
+import { Suspense } from 'react';
 
 export const Layout = () => {
   return (
@@ -26,7 +27,9 @@ export const Layout = () => {
         </Nav>
       </Header>
       <main>
-        <Outlet />
+        <Suspense fallback={<div>...Loading</div>}>
+          <Outlet />
+        </Suspense>
       </main>
     </BaseContainer>
   );
