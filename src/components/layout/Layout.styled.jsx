@@ -18,7 +18,7 @@ export const StyledLink = styled(NavLink)`
   }
 
   &:hover::after {
-    transform: scaleX(1); /* Збільшуємо ширину підчеркування до 100% */
+    transform: scaleX(1);
     transform-origin: left;
   }
   color: black;
@@ -45,7 +45,7 @@ export const BaseContainer = styled.div`
 `;
 
 export const Header = styled.header`
-  border: 1px solid ${({ theme: { colors } }) => colors.headerColor};
+  border-bottom: 1px solid black;
   box-shadow: ${({ theme: { colors } }) => colors.boxShadow};
   border-radius: ${({ theme: { radii } }) => radii.md};
 `;

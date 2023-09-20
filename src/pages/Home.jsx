@@ -14,8 +14,6 @@ const Home = () => {
   const [error, setError] = useState(false);
   const [requestCancelled, setRequestCancelled] = useState(false);
 
-  console.log('This a Home');
-
   const controller = useRef();
 
   useEffect(() => {

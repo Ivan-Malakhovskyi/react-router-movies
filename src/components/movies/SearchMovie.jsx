@@ -29,9 +29,7 @@ export const SearchMovie = ({ movies }) => {
 
       <MovieList movies={movies} />
 
-      {/* {searchFailed && movies && !loading && (
-        <ErrorMsg>No movies found 😥</ErrorMsg>
-      )} */}
+      {/* {!movies && !loading && <p>No movies found 😥</p>} */}
       <Toaster />
     </>
   );

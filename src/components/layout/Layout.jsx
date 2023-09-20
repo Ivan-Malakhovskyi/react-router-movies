@@ -37,7 +37,7 @@ export const Layout = () => {
                 color: '#010101',
               }}
             >
-              loading data...👌
+              Loading data...👌
             </div>
           }
         >
