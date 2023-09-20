@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { BtnSearch, Input, Form } from './Movies.styled';
-import toast, { Toaster } from 'react-hot-toast';
 import { useQueryParams } from 'components/hooks/useQueryParams';
-import { ErrorMsg } from 'components/layout/Layout.styled';
+// import { ErrorMsg } from 'components/layout/Layout.styled';
 import { MovieList } from './MoviesList';
-import { useLocation } from 'react-router-dom';
+import { Loader } from 'components/loader/Loader';
+import { Toaster } from 'react-hot-toast';
 
 export const SearchMovie = ({ movies }) => {
-  const [serched] = useState(false);
-  const { updateQuery, handleFormSubmit } = useQueryParams();
-  const location = useLocation();
-  console.log(location);
+  const { updateQuery, handleFormSubmit } = useQueryParams(movies);
+  const [loading] = useState(false);
+  // const [searchFailed] = useState(false);
 
   return (
     <>
       <div>
+        {loading && <Loader />}
+
         <Form onSubmit={handleFormSubmit}>
           <Input
             type="text"
@@ -23,17 +24,15 @@ export const SearchMovie = ({ movies }) => {
             placeholder="Search movies"
           />
           <BtnSearch type="submit">Search</BtnSearch>
-          <Toaster />
         </Form>
       </div>
 
-      {movies.length > 0 && <MovieList movies={movies} />}
-      {serched && movies.length === 0 && (
-        <ErrorMsg>
-          No movies found 😥
-          {toast.error('Sorry such information not found')}
-        </ErrorMsg>
-      )}
+      <MovieList movies={movies} />
+
+      {/* {searchFailed && movies && !loading && (
+        <ErrorMsg>No movies found 😥</ErrorMsg>
+      )} */}
+      <Toaster />
     </>
   );
 };

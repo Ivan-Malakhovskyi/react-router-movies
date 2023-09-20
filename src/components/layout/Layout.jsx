@@ -27,7 +27,20 @@ export const Layout = () => {
         </Nav>
       </Header>
       <main>
-        <Suspense fallback={<div>...Loading</div>}>
+        <Suspense
+          fallback={
+            <div
+              style={{
+                textAlign: 'center',
+                paddingTop: 20,
+                fontSize: 20,
+                color: '#010101',
+              }}
+            >
+              loading data...👌
+            </div>
+          }
+        >
           <Outlet />
         </Suspense>
       </main>

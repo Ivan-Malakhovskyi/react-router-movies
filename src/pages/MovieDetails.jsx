@@ -1,5 +1,4 @@
 import { Outlet, useLocation, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import {
   MoovieImage,
@@ -17,39 +16,48 @@ import {
 } from 'components/layout/Layout.styled';
 import { RewiewsParagraph } from 'components/reviews/Reviews.styled';
 import { BackLink } from 'components/movies/SearchMovie.styled';
+import { fetchInfoMoovieItem } from 'components/API/movieService';
+import { Loader } from 'components/loader/Loader';
 
 const MovieDetails = () => {
+  const [moviesInfo, setMoviesInfo] = useState(null);
   const { movieId } = useParams();
+  const [loading, setLoading] = useState(false);
+
   const location = useLocation();
   const backLinkLocation = useRef(location?.state?.from ?? '/movies');
-
-  const API_KEY = 'fd98539c24110fb9af262d45db0a0c64';
-  axios.defaults.baseURL = 'https://api.themoviedb.org/3';
 
   const defaultImg =
     'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
 
-  const [moviesInfo, setMoviesInfo] = useState(null);
+  const controller = useRef();
 
   useEffect(() => {
     if (!movieId) return;
-    const fetchInfoMoovieItem = async () => {
+    const getMovieItem = async () => {
+      if (controller.current) {
+        controller.current.abort();
+      }
+
+      controller.current = new AbortController();
       try {
-        const response = await axios.get(
-          `/movie/${movieId}?api_key=${API_KEY}`
-        );
-        const { data } = response;
+        setLoading(true);
+        const { data } = await fetchInfoMoovieItem(movieId, controller);
         setMoviesInfo(data);
       } catch (error) {
         console.log(error.message);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchInfoMoovieItem();
+    getMovieItem();
   }, [movieId]);
 
   return (
     <>
       <BackLink to={backLinkLocation.current}>Back</BackLink>
+
+      {loading && <Loader />}
 
       {moviesInfo && (
         <MovieWrapper>

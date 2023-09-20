@@ -1,59 +1,73 @@
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { TitleInfoMore } from 'components/movieDetailsStyled/movieDetailst.styled';
 import { ReviewsWrapper, RewiewsParagraph } from './Reviews.styled';
-import toast, { Toaster } from 'react-hot-toast';
-import { useQueryParams } from 'components/hooks/useQueryParams';
+import toast from 'react-hot-toast';
 import { ErrorMsg } from 'components/layout/Layout.styled';
+import { fetchReviews } from 'components/API/movieService';
+import { Loader } from 'components/loader/Loader';
 
 const Reviews = () => {
   const { movieId } = useParams();
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [requestCancelled, setRequestCancelled] = useState(false);
 
-  const { API_KEY } = useQueryParams();
-
-  axios.defaults.baseURL = 'https://api.themoviedb.org/3';
-  const [reviews, setReviews] = useState(null);
-  console.log('Reviews  reviews', reviews);
+  const controller = useRef();
 
   useEffect(() => {
     if (!movieId) return;
-    const fetchReviews = async () => {
+
+    const getReviews = async () => {
+      setLoading(true);
+      setError(false);
+      setRequestCancelled(false);
+
+      if (controller.current) {
+        controller.current.abort();
+      }
+
+      controller.current = new AbortController();
+
       try {
-        const response = await axios.get(
-          `/movie/${movieId}/reviews?api_key=${API_KEY}`
-        );
-        const {
-          data: { results },
-        } = response;
+        const { results } = await fetchReviews(movieId, controller);
 
         setReviews(results);
       } catch (error) {
+        if (error.code !== 'ERR_CANCELED') {
+          setError(true);
+        }
         console.log(error.message);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchReviews();
-  }, [API_KEY, movieId]);
+    getReviews();
+  }, [movieId]);
 
   return (
     <>
       <TitleInfoMore> Reviews: </TitleInfoMore>
-      <Toaster />
-      <div>
-        {reviews && reviews.length > 0 ? (
-          reviews.map(({ author, content, id }) => (
-            <ReviewsWrapper key={id}>
-              <TitleInfoMore> Author: {author}</TitleInfoMore>
-              <RewiewsParagraph>{content}</RewiewsParagraph>
-            </ReviewsWrapper>
-          ))
-        ) : (
-          <ErrorMsg>
-            We don't have any reviews for this movie{' '}
-            {toast.error('Sorry,we dont find any informations about reviews')}
-          </ErrorMsg>
-        )}
-      </div>
+      {loading && <Loader />}
+
+      {error && !loading && requestCancelled && (
+        <ErrorMsg>
+          ❌ Something went wrong,try reload page{' '}
+          {toast.error('Ooops, something went wrong')}
+        </ErrorMsg>
+      )}
+
+      {!error && reviews.length > 0 ? (
+        reviews.map(({ author, content, id }) => (
+          <ReviewsWrapper key={id}>
+            <TitleInfoMore> Author: {author}</TitleInfoMore>
+            <RewiewsParagraph>{content}</RewiewsParagraph>
+          </ReviewsWrapper>
+        ))
+      ) : (
+        <ErrorMsg>We don't have any reviews for this movie </ErrorMsg>
+      )}
     </>
   );
 };

@@ -1,52 +1,65 @@
-import axios from 'axios';
-import {
-  HomeTitle,
-  ListMoovie,
-  SectionHome,
-  StyledLinkItem,
-} from 'components/home/Home.styled';
-import { useQueryParams } from 'components/hooks/useQueryParams';
-import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import { useEffect, useState, useRef } from 'react';
+
+import { HomeTitle, SectionHome } from 'components/home/Home.styled';
+
+import { Loader } from 'components/loader/Loader';
+import { ErrorMsg } from 'components/layout/Layout.styled';
+import { fetchCollectionFilms } from 'components/API/movieService';
+import { MovieList } from 'components/movies/MoviesList';
 
 const Home = () => {
-  const { API_KEY } = useQueryParams();
-  axios.defaults.baseURL = 'https://api.themoviedb.org/3';
-  const location = useLocation();
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [requestCancelled, setRequestCancelled] = useState(false);
 
-  console.log(location);
+  console.log('This a Home');
 
-  const [fetchData, setFetchData] = useState([]);
+  const controller = useRef();
 
   useEffect(() => {
-    const fetchCollectionFilms = async () => {
+    const getCollectionFilm = async () => {
+      setRequestCancelled(false);
+
+      if (controller.current) {
+        controller.current.abort();
+      }
+
+      controller.current = new AbortController();
+
       try {
-        const response = await axios.get(
-          `/trending/all/day?api_key=${API_KEY}`
-        );
-        const { results } = response.data;
-        console.log(results);
-        setFetchData(results);
+        setLoading(true);
+        setError(false);
+
+        const { results } = await fetchCollectionFilms(controller);
+        setMovies(results);
       } catch (error) {
-        console.log(error.message);
+        if (error.code !== 'ERR_CANCELED') {
+          setError(true);
+          console.log(error.message);
+        }
+      } finally {
+        setLoading(false);
       }
     };
-    fetchCollectionFilms();
-  }, [API_KEY]);
+    getCollectionFilm();
+  }, []);
 
   return (
     <SectionHome>
       <HomeTitle>Trending today</HomeTitle>
 
-      <ListMoovie>
-        {fetchData.map(({ id, original_title }) => (
-          <li key={id}>
-            <StyledLinkItem to={`/movies/${id}`} state={{ from: location }}>
-              {original_title}
-            </StyledLinkItem>
-          </li>
-        ))}
-      </ListMoovie>
+      {loading && <Loader />}
+      {error && !loading && requestCancelled && (
+        <ErrorMsg>
+          ❌ Something went wrong,try reload page{' '}
+          {toast.error('Ooops, something went wrong')}
+        </ErrorMsg>
+      )}
+
+      {movies.length > 0 && <MovieList movies={movies} />}
+      <Toaster />
     </SectionHome>
   );
 };

@@ -1,10 +1,11 @@
 import { useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
 
-export const useQueryParams = () => {
+export const useQueryParams = movies => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchFailed] = useState(false);
   const searchMovie = searchParams.get('query') ?? '';
-  const API_KEY = 'fd98539c24110fb9af262d45db0a0c64';
 
   const updateQuery = () => {
     const newParams = searchMovie !== '' ? { query: searchMovie } : {};
@@ -19,6 +20,12 @@ export const useQueryParams = () => {
       toast.error('Please input movie title');
       return;
     }
+
+    if (!movies && movies.length === 0) {
+      setSearchFailed(true);
+      toast.error('No movies found 😥');
+    }
+
     searchParams.set('query', movieSearch);
     setSearchParams(searchParams);
     form.reset();
@@ -27,5 +34,5 @@ export const useQueryParams = () => {
     //!прописувати параметри, які не змінююься
   };
 
-  return { searchMovie, updateQuery, handleFormSubmit, API_KEY };
+  return { searchMovie, updateQuery, handleFormSubmit };
 };

@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 
 export const CardWrapper = styled.div`
-  flex-basis: calc((100% - 4 * 24px) / 4);
+  flex-basis: calc((100% - 4 * 24px) / 5);
 `;
 
 export const Gallery = styled.ul`
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  column-gap: 24px;
-  row-gap: 48px;
+  flex-wrap: wrap;
+  gap: 48px 24px;
 `;
 
 export const ImageItem = styled.li`
@@ -21,7 +20,6 @@ export const ImageItem = styled.li`
 export const ImageGalleryItemImage = styled.img`
   width: 100%;
   height: 200px;
-  flex-basis: calc(33.33% - 20px);
   object-fit: cover;
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
   &:hover,
