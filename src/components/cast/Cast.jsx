@@ -5,7 +5,6 @@ import {
   CardWrapper,
   Gallery,
   ImageGalleryItemImage,
-  ImageItem,
   Info,
 } from './Cast.styled';
 import { TitleInfoMore } from 'components/movieDetailsStyled/movieDetailst.styled';
@@ -51,7 +50,7 @@ const Cast = () => {
           {cast &&
             cast.length > 0 &&
             cast.map(({ profile_path, original_name, character, id }) => (
-              <ImageItem key={id}>
+              <li key={id}>
                 <ImageGalleryItemImage
                   src={
                     profile_path
@@ -61,7 +60,7 @@ const Cast = () => {
                   alt={original_name}
                 />
                 <Info> Character : {character}</Info>
-              </ImageItem>
+              </li>
             ))}
 
           {cast && cast.length === 0 && <p>Cast not found 😥</p>}

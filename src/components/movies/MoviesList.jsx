@@ -18,13 +18,3 @@ export const MovieList = ({ movies }) => {
     </>
   );
 };
-
-// <ListMoovie>
-//   {movies.map(({ title, id }) => (
-//     <li key={id}>
-//       <StyledLinkItem to={`/movies/${id}`} state={{ from: location }}>
-//         {title}
-//       </StyledLinkItem>
-//     </li>
-//   ))}
-// </ListMoovie>;

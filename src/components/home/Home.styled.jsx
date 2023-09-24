@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export const HomeTitle = styled.h2`
   color: ${({ theme: { colors } }) => colors.borderListColor};
+  margin-bottom: 20px;
   font-weight: 700;
   font-size: 26px;
   line-height: 1.11;

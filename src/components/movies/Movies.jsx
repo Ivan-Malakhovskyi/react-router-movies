@@ -5,9 +5,10 @@ import { SearchMovie } from './SearchMovie';
 import { useQueryParams } from 'components/hooks/useQueryParams';
 import { Loader } from 'components/loader/Loader';
 import toast, { Toaster } from 'react-hot-toast';
+import { ErrorMsg } from 'components/layout/Layout.styled';
 
 const Movies = () => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(null);
   const { searchMovie } = useQueryParams();
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +46,10 @@ const Movies = () => {
       {' '}
       {loading && <Loader />}
       <SectionSearchMovie>
-        <SearchMovie movies={movies} />
+        {movies && <SearchMovie movies={movies} />}
+        {searchMovie && (
+          <ErrorMsg>Not found, please try something else 😉</ErrorMsg>
+        )}
         <Toaster />
       </SectionSearchMovie>
     </>

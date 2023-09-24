@@ -9,6 +9,16 @@ const MovieDetails = lazy(() => import('./pages/MovieDetails'));
 const Cast = lazy(() => import('./components/cast/Cast'));
 const Reviews = lazy(() => import('./components/reviews/Reviews '));
 
+//! Приклад як обійти lazy , якщо іменований експорт,
+//* Але простіше зробити дефолтний експопрт
+
+// const Layout = lazy(() =>
+//   import('./components/layout/Layout').then(module => ({
+//     ...module,
+//     default: module.Layout,
+//   }))
+// );
+
 export const App = () => {
   return (
     <>
@@ -19,6 +29,7 @@ export const App = () => {
           <Route path="movies/:movieId" element={<MovieDetails />}>
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />
+            <Route path="*" element={<p>Not found</p>} />
           </Route>
         </Route>
       </Routes>

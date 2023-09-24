@@ -9,7 +9,7 @@ import { fetchCollectionFilms } from 'components/API/movieService';
 import { MovieList } from 'components/movies/MoviesList';
 
 const Home = () => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [requestCancelled, setRequestCancelled] = useState(false);
@@ -56,7 +56,7 @@ const Home = () => {
         </ErrorMsg>
       )}
 
-      {movies.length > 0 && <MovieList movies={movies} />}
+      {movies && movies.length > 0 && <MovieList movies={movies} />}
       <Toaster />
     </SectionHome>
   );

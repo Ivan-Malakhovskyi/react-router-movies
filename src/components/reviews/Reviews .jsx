@@ -9,7 +9,7 @@ import { Loader } from 'components/loader/Loader';
 
 const Reviews = () => {
   const { movieId } = useParams();
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [requestCancelled, setRequestCancelled] = useState(false);
@@ -58,7 +58,7 @@ const Reviews = () => {
         </ErrorMsg>
       )}
 
-      {!error && reviews.length > 0 ? (
+      {reviews && !error && reviews.length > 0 ? (
         reviews.map(({ author, content, id }) => (
           <ReviewsWrapper key={id}>
             <TitleInfoMore> Author: {author}</TitleInfoMore>

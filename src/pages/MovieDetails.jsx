@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useParams } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import {
   MoovieImage,
   MovieInfo,
@@ -105,7 +105,22 @@ const MovieDetails = () => {
           <StyledLinkItem to="reviews">Reviews</StyledLinkItem>
         </li>
       </ListMainLink>
-      <Outlet />
+      <Suspense
+        fallback={
+          <div
+            style={{
+              textAlign: 'center',
+              paddingTop: 20,
+              fontSize: 20,
+              color: '#010101',
+            }}
+          >
+            Loading data...👌
+          </div>
+        }
+      >
+        <Outlet />
+      </Suspense>
     </>
   );
 };

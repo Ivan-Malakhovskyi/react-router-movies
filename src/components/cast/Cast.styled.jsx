@@ -5,20 +5,18 @@ export const CardWrapper = styled.div`
 `;
 
 export const Gallery = styled.ul`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 48px 24px;
-`;
-
-export const ImageItem = styled.li`
-  border-radius: 2px;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  display: grid;
+  max-width: calc(100vw - 48px);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 0px auto;
+  padding: 40px 0px;
+  list-style: none;
 `;
 
 export const ImageGalleryItemImage = styled.img`
   width: 100%;
+  border-radius: 2px;
   height: 200px;
   object-fit: cover;
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
