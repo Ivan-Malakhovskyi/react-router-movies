@@ -10,12 +10,17 @@ import { ErrorMsg } from 'components/layout/Layout.styled';
 const Movies = () => {
   const [movies, setMovies] = useState(null);
   const { searchMovie } = useQueryParams();
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchFailed, setSearchFailed] = useState(false);
+  const [isRequestCancelled, setIsRequestCancelled] = useState(false);
 
   const controller = useRef();
 
   useEffect(() => {
     const fetchMovie = async () => {
+      setIsRequestCancelled(false);
+
       if (controller.current) {
         controller.current.abort();
       }
@@ -24,18 +29,24 @@ const Movies = () => {
 
       try {
         setLoading(true);
+        setError(false);
 
         const { results } = await fetchInput(searchMovie, controller);
 
         if (results.length === 0 && searchMovie) {
+          setSearchFailed(true);
           toast.error('Such film not found');
         }
 
         setMovies(results);
       } catch (error) {
-        console.log(error.message);
+        if (error.code !== 'ERR_CANCELED') {
+          setError(true);
+          console.log(error.message);
+        }
       } finally {
         setLoading(false);
+        setError(false);
       }
     };
     fetchMovie();
@@ -47,8 +58,15 @@ const Movies = () => {
       {loading && <Loader />}
       <SectionSearchMovie>
         {movies && <SearchMovie movies={movies} />}
-        {searchMovie && (
+        {searchFailed && movies.length === 0 && !loading && (
           <ErrorMsg>Not found, please try something else 😉</ErrorMsg>
+        )}
+
+        {error && !loading && !isRequestCancelled && (
+          <ErrorMsg>
+            ❌ Something went wrong,try reload page
+            {toast.error('Ooops, something went wrong')}
+          </ErrorMsg>
         )}
         <Toaster />
       </SectionSearchMovie>
