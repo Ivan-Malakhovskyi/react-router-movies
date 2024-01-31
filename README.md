@@ -20,8 +20,9 @@ including actors, rating, year of release and description.
 
 ### Clone the repository:
 
-1. ![`git clone`](https://github.com/Ivan-Malakhovskyi/react-router-movies) `cd`
-   movie-search-app
+1. ![git clone](https://github.com/Ivan-Malakhovskyi/react-router-movies)
+
+`cd` movie-search-app
 
 ### Installing dependencies:
 
